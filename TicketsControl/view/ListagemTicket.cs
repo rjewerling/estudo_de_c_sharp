@@ -29,6 +29,15 @@ namespace TicketsControl.view {
         public void carregarListagem() {
             dgvTickets.DataSource = new TicketDao().list();
             tsslQuantidadeRegistros.Text = dgvTickets.RowCount.ToString();
+            totalizarQuantidadeDeTickets();
+        }
+
+        public void totalizarQuantidadeDeTickets() {
+            int totalTickets = 0;
+            for (int linha = 0; linha < dgvTickets.Rows.Count; ++linha) {
+                totalTickets += Convert.ToInt32(dgvTickets.Rows[linha].Cells["Quantidade"].Value);
+            }
+            tsslTotalTickets.Text = totalTickets.ToString();
         }
 
         private void abrirFormularioCadastro(int idTicket) {
@@ -58,6 +67,7 @@ namespace TicketsControl.view {
         private void bBuscar_Click(object sender, EventArgs e) {
             dgvTickets.DataSource = new TicketDao().find(tbBuscar.Text);
             tsslQuantidadeRegistros.Text = Convert.ToString(dgvTickets.Rows.Count);
+            totalizarQuantidadeDeTickets();
 
             if (dgvTickets.Rows.Count <= 0) {
                 MessageBox.Show("Não foi encontrado nenhum registro.");

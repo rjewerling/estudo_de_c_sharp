@@ -29,6 +29,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslQuantidadeRegistros = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lttlabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslTotalTickets = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -125,7 +127,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel2,
-            this.tsslQuantidadeRegistros});
+            this.tsslQuantidadeRegistros,
+            this.lttlabel,
+            this.tsslTotalTickets});
             this.statusStrip1.Location = new System.Drawing.Point(0, 426);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(668, 22);
@@ -143,6 +147,19 @@
             this.tsslQuantidadeRegistros.Name = "tsslQuantidadeRegistros";
             this.tsslQuantidadeRegistros.Size = new System.Drawing.Size(13, 17);
             this.tsslQuantidadeRegistros.Text = "0";
+            // 
+            // lttlabel
+            // 
+            this.lttlabel.Margin = new System.Windows.Forms.Padding(50, 3, 0, 2);
+            this.lttlabel.Name = "lttlabel";
+            this.lttlabel.Size = new System.Drawing.Size(88, 17);
+            this.lttlabel.Text = "Total de tickets:";
+            // 
+            // tsslTotalTickets
+            // 
+            this.tsslTotalTickets.Name = "tsslTotalTickets";
+            this.tsslTotalTickets.Size = new System.Drawing.Size(13, 17);
+            this.tsslTotalTickets.Text = "0";
             // 
             // ListagemTicket
             // 
@@ -180,5 +197,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel tsslQuantidadeRegistros;
+        private System.Windows.Forms.ToolStripStatusLabel lttlabel;
+        private System.Windows.Forms.ToolStripStatusLabel tsslTotalTickets;
     }
 }
