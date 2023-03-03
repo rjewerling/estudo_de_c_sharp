@@ -28,15 +28,6 @@ namespace TicketsControl.view {
                 operacao = Operacoes.ATUALIZACAO;
                 carregarInformacoes();
                 exibirInformacoesCarregadasNaTela();
-
-                // TODO: Isso pode ser configuravel, e depois que a tela carregou e se for operação de atualização.
-                // Ao Sair da janela, se não foi alterado nada, achar uma forma de ignorar as alterações indevidas.
-                // Talvez um atributo(campo) informando para sair na força
-                //try {
-                //    validacaoBasicaDoNumeroCPF();
-                //} catch(Exception e) {
-                //    MessageBox.Show(e.Message, "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //}
             } else {
                 operacao = Operacoes.CADASTRO;
                 dtpDataUltimaAlteracao.Visible = false;
@@ -105,6 +96,7 @@ namespace TicketsControl.view {
                 throw new Exception("Informe o nome do empregado.");
 
             validacaoBasicaDoNumeroCPF();
+            verificarDisponibilidadeDeCadastroDoCPF();
 
             if (!rbSituacaoAtivo.Checked && operacao == Operacoes.CADASTRO)
                 throw new Exception("Para novos cadastros de empregado a situação deverá ser sempre ativa.");
@@ -131,6 +123,12 @@ namespace TicketsControl.view {
                 cpf.Equals("66666666666") || cpf.Equals("77777777777") ||
                 cpf.Equals("88888888888") || cpf.Equals("99999999999"))
                 throw new Exception("Número do cadastro de pessoa física inválida.");
+        }
+
+        private void verificarDisponibilidadeDeCadastroDoCPF() {
+            Empregado empregado = new EmpregadoDao().findByCpf(mtbCpf.Text);
+            if (empregado != null)
+                throw new Exception("Número do CPF já está cadastrado para o nome '" + empregado.Nome() + "'.");
         }
 
         private Empregado converterDadosInseridosEmObjeto() {
