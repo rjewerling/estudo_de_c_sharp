@@ -45,11 +45,9 @@ namespace TicketsControl.model {
                    nome == empregado.nome &&
                    cpf == empregado.cpf &&
                    situacao == empregado.situacao &&
-                   dataUltimaAlteracao == empregado.dataUltimaAlteracao &&
                    Id == empregado.Id &&
                    Cpf == empregado.Cpf &&
-                   Situacao == empregado.Situacao &&
-                   DataUltimaAlteracao == empregado.DataUltimaAlteracao;
+                   Situacao == empregado.Situacao;
         }
 
         public override int GetHashCode() {
@@ -57,11 +55,9 @@ namespace TicketsControl.model {
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(nome);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(cpf);
             hashCode = hashCode * -1521134295 + situacao.GetHashCode();
-            hashCode = hashCode * -1521134295 + dataUltimaAlteracao.GetHashCode();
             hashCode = hashCode * -1521134295 + Id.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Cpf);
             hashCode = hashCode * -1521134295 + Situacao.GetHashCode();
-            hashCode = hashCode * -1521134295 + DataUltimaAlteracao.GetHashCode();
             return hashCode;
         }
 
