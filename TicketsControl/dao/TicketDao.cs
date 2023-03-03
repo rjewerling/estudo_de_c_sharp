@@ -4,6 +4,10 @@ using System.Data;
 using System.Windows.Forms;
 using TicketsControl.model;
 using System.Text;
+using Microsoft.Office.Interop.Excel;
+using DataTable = System.Data.DataTable;
+using System.Runtime.InteropServices.ComTypes;
+using System.Collections.Generic;
 
 namespace TicketsControl.dao {
 
@@ -188,6 +192,101 @@ namespace TicketsControl.dao {
             } finally {
                 connection.Dispose();
             }
+        }
+
+        public DataTable find(Empregado empregado, int? qtdDe, int? qtdAte, char[] situacao, DateTime? dataDe, DateTime? dataAte) {
+            DataTable dataTable = new DataTable();
+            SqlConnection connection = null;
+            try {
+                string sqlFind = "SELECT " +
+                "t.id AS 'Id', " +
+                "e.nome AS 'Nome do empregado', " +
+                "e.cpf AS 'Cadastro de pessoa física', " +
+                "t.quantidade AS 'Quantidade', " +
+                "t.situacao AS 'Situação', " +
+                "t.dataEntrega AS 'Data e hora da Entrega' " +
+                "FROM ticket t " +
+                "INNER JOIN empregado e ON t.idEmpregado = e.id ";
+
+                connection = Connection();
+                SqlCommand command = new SqlCommand(sqlFind, connection);
+
+                if (empregado != null || situacao != null || qtdDe != null || qtdAte != null)
+                    sqlFind = sqlFind + " WHERE ";
+
+                if (empregado != null) {
+                    sqlFind = sqlFind + "e.id = @idEmpregado";
+                    command.Parameters.AddWithValue("@idEmpregado", empregado.Id);
+                }
+
+                if (situacao != null) {
+                    if (empregado != null)
+                        sqlFind = sqlFind + " AND ";
+                    sqlFind = sqlFind + "t.situacao IN (@paramSituacao)";
+
+                    var nomeDosParametros = new List<string>();
+                    int indice = 0;
+                    foreach (char valor in situacao) {
+                        string parametroNome = "@paramSituacao" + indice;
+                        command.Parameters.AddWithValue(parametroNome, valor);
+                        nomeDosParametros.Add(parametroNome);
+                        indice += 1;
+                    }
+                    sqlFind = sqlFind.Replace("@paramSituacao", string.Join(",", nomeDosParametros));
+                }
+
+                if (qtdDe != null && qtdAte == null) {
+                    if (empregado != null || situacao != null)
+                        sqlFind = sqlFind + " AND ";
+                    sqlFind = sqlFind + "t.quantidade >= @qtdDe";
+                    command.Parameters.AddWithValue("@qtdDe", qtdDe);
+                }
+                if (qtdDe == null && qtdAte != null) {
+                    if (empregado != null || situacao != null)
+                        sqlFind = sqlFind + " AND ";
+                    sqlFind = sqlFind + "t.quantidade <= @qtdAte";
+                    command.Parameters.AddWithValue("@qtdAte", qtdAte);
+                }
+                if (qtdDe != null && qtdAte != null) {
+                    if (empregado != null || situacao != null)
+                        sqlFind = sqlFind + " AND ";
+                    sqlFind = sqlFind + "t.quantidade BETWEEN @qtdDe AND @qtdAte";
+                    command.Parameters.AddWithValue("@qtdDe", qtdDe);
+                    command.Parameters.AddWithValue("@qtdAte", qtdAte);
+                }
+
+                if (dataDe != null && dataAte == null) {
+                    if (empregado != null || situacao != null || dataDe != null || dataAte != null)
+                        sqlFind = sqlFind + " AND ";
+                    sqlFind = sqlFind + "CONVERT(VARCHAR(10), t.dataEntrega, 103) >= @dataDe";
+                    command.Parameters.AddWithValue("@dataDe", dataDe);
+                }
+                if (dataDe == null && dataAte != null) {
+                    if (empregado != null || situacao != null || dataDe != null || dataAte != null)
+                        sqlFind = sqlFind + " AND ";
+                    sqlFind = sqlFind + "CONVERT(VARCHAR(10), t.dataEntrega, 103) <= @dataAte";
+                    command.Parameters.AddWithValue("@dataAte", dataAte);
+                }
+                if (dataDe != null && dataAte != null) {
+                    if (empregado != null || situacao != null || dataDe != null || dataAte != null)
+                        sqlFind = sqlFind + " AND ";
+                    sqlFind = sqlFind + "CONVERT(VARCHAR(10), t.dataEntrega, 103) BETWEEN @dataDe AND @dataAte";
+                    command.Parameters.AddWithValue("@dataDe", dataDe);
+                    command.Parameters.AddWithValue("@dataAte", dataAte);
+                }
+
+                command.CommandText = sqlFind + " ORDER BY e.nome ASC, t.dataEntrega ASC";
+                connection.Open();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
+                sqlDataAdapter.Fill(dataTable);
+                command.Dispose();
+                sqlDataAdapter.Dispose();
+            } catch (Exception e) {
+                throw e;
+            } finally {
+                connection.Close();
+            }
+            return dataTable;
         }
     }
 }

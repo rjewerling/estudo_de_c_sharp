@@ -8,8 +8,10 @@ namespace TicketsControl.view {
 
     public partial class ListagemEmpregado : Form {
 
+        private readonly RelatorioDeTicket relatorioDeTicketForm;
         private readonly TicketForm ticketForm;
-        private bool removerSelecaoDoRegistro = true;
+        private readonly bool isOperacaoSelecao;
+        private bool removerSelecaoDoRegistro = true; //XXX: Analisar mais tarde pois isso parece que da para substituir pelo isOperacaoSelecao
 
         public ListagemEmpregado() {
             InitializeComponent();
@@ -20,7 +22,18 @@ namespace TicketsControl.view {
 
         public ListagemEmpregado(TicketForm ticketForm, int idEmpregadoSelecionado) {
             this.ticketForm = ticketForm;
+            isOperacaoSelecao = true;
+            InitializeComponent();
+            configurarParaExibirOuEsconderBotoes();
+            carregarListagem();
+            configuraLarguraDasColunasDaTabela();
+            dgvEmpregados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            destacaRegistroSelecionadoPeloUsuarioNaTabela(idEmpregadoSelecionado);
+        }
 
+        public ListagemEmpregado(RelatorioDeTicket relatorioDeTicketForm, int idEmpregadoSelecionado) {
+            this.relatorioDeTicketForm = relatorioDeTicketForm;
+            isOperacaoSelecao = true;
             InitializeComponent();
             configurarParaExibirOuEsconderBotoes();
             carregarListagem();
@@ -50,7 +63,7 @@ namespace TicketsControl.view {
         }
 
         private void configurarParaExibirOuEsconderBotoes() {
-            if (ticketForm == null) {
+            if (!isOperacaoSelecao) {
                 bSelecionar.Visible = false;
                 return;
             }
@@ -79,7 +92,7 @@ namespace TicketsControl.view {
         }
 
         private void dgvEmpregados_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e) {
-            if (ticketForm == null || removerSelecaoDoRegistro)
+            if (!isOperacaoSelecao || removerSelecaoDoRegistro)
                 dgvEmpregados.ClearSelection();
         }
 
@@ -110,7 +123,11 @@ namespace TicketsControl.view {
             int idEmpregado = Convert.ToInt32(row[0]);
 
             Empregado empregadoSelecionado = new EmpregadoDao().findById(idEmpregado);
-            ticketForm.setEmpregado(empregadoSelecionado);
+            if (ticketForm != null)
+                ticketForm.setEmpregado(empregadoSelecionado);
+
+            if (relatorioDeTicketForm != null)
+                relatorioDeTicketForm.setEmpregado(empregadoSelecionado);
             this.Close();
         }
 

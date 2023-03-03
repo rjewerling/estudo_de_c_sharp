@@ -114,6 +114,9 @@
     <EmbeddedResource Include="view\RelatorioDeEmpregados.resx">
       <DependentUpon>RelatorioDeEmpregados.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="view\RelatorioDeTicket.resx">
+      <DependentUpon>RelatorioDeTicket.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="view\TicketForm.resx">
       <DependentUpon>TicketForm.cs</DependentUpon>
     </EmbeddedResource>
