@@ -11,7 +11,7 @@ namespace TicketsControl.view {
         private readonly RelatorioDeTicket relatorioDeTicketForm;
         private readonly TicketForm ticketForm;
         private readonly bool isOperacaoSelecao;
-        private bool removerSelecaoDoRegistro = true; //XXX: Analisar mais tarde pois isso parece que da para substituir pelo isOperacaoSelecao
+        private bool removerSelecaoDoRegistro = true;
 
         public ListagemEmpregado() {
             InitializeComponent();
@@ -23,17 +23,16 @@ namespace TicketsControl.view {
         public ListagemEmpregado(TicketForm ticketForm, int idEmpregadoSelecionado) {
             this.ticketForm = ticketForm;
             isOperacaoSelecao = true;
-            InitializeComponent();
-            configurarParaExibirOuEsconderBotoes();
-            carregarListagem();
-            configuraLarguraDasColunasDaTabela();
-            dgvEmpregados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            destacaRegistroSelecionadoPeloUsuarioNaTabela(idEmpregadoSelecionado);
+            configuraEspecialmenteATelaParaOperacaoDeSelecao(idEmpregadoSelecionado);
         }
 
         public ListagemEmpregado(RelatorioDeTicket relatorioDeTicketForm, int idEmpregadoSelecionado) {
             this.relatorioDeTicketForm = relatorioDeTicketForm;
             isOperacaoSelecao = true;
+            configuraEspecialmenteATelaParaOperacaoDeSelecao(idEmpregadoSelecionado);
+        }
+
+        private void configuraEspecialmenteATelaParaOperacaoDeSelecao(int idEmpregadoSelecionado) {
             InitializeComponent();
             configurarParaExibirOuEsconderBotoes();
             carregarListagem();

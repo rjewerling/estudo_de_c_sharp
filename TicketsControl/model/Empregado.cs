@@ -4,7 +4,6 @@ using System.Collections.Generic;
 namespace TicketsControl.model {
     public class Empregado : ICloneable {
 
-        //private int id;
         private string nome;
         private string cpf;
         private bool situacao;
